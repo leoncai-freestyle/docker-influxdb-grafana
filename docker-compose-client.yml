@@ -14,7 +14,7 @@ services:
 #clients
      telegraf:
 #         image: telegraf
-         hostname: leon-ubuntu
+         hostname: $hostname
          build: telegraf
            #INFLUXB: 13.210.153.32
 #         network_mode: host
