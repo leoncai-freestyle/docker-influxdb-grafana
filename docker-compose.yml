@@ -1,21 +1,26 @@
 version: '2'
+volumes:
+     influxdb:
+     grafana:
 services:
+#clients
      collectd:
 #         image: fr3nd/collectd
          build: collectd
            #INFLUXB: 13.210.153.32
          network_mode: host
-         container_name: collectd
+#         container_name: collectd
          volumes:
              - /proc:/mnt/proc:ro
          privileged: true
+#clients
      telegraf:
 #         image: telegraf
          hostname: leon-ubuntu
          build: telegraf
            #INFLUXB: 13.210.153.32
 #         network_mode: host
-         container_name: telegraf
+#         container_name: telegraf
          volumes:
              - /var/run/docker.sock:/var/run/docker.sock:ro
              - /sys:/rootfs/sys:ro
@@ -26,7 +31,27 @@ services:
              - HOST_SYS=/rootfs/sys
              - HOST_ETC=/rootfs/etc
          extra_hosts:
-             - "influxdb:13.210.153.32"
+             - "influxdb:52.64.148.2"
          privileged: true      
          restart: always
 
+#server
+     influxdb:
+         build: influxdb
+#         container_name: influxdb
+         ports:
+            - 8086:8086
+            - 8083:8083
+            - 25826:25826/udp
+         volumes:
+           - influxdb:/var/lib/influxdb
+         restart: unless-stopped
+     grafana:
+         image: grafana/grafana:3.1.1
+#         container_name: grafana
+         ports:
+           - 3000:3000
+         extra_hosts:
+           - "influxdb:52.64.148.2"
+         volumes:
+           - grafana:/var/lib/grafana
