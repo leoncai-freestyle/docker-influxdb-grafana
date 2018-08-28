@@ -13,6 +13,7 @@ services:
          volumes:
              - /proc:/mnt/proc:ro
          privileged: true
+         restart: unless-stopped
 #clients
      telegraf:
 #         image: telegraf
@@ -33,7 +34,7 @@ services:
          extra_hosts:
              - "influxdb:52.64.148.2"
          privileged: true      
-         restart: always
+         restart: unless-stopped
 
 #server
      influxdb:
@@ -55,3 +56,4 @@ services:
            - "influxdb:52.64.148.2"
          volumes:
            - grafana:/var/lib/grafana
+         restart: unless-stopped
