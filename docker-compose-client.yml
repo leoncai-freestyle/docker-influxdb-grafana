@@ -33,3 +33,27 @@ services:
          privileged: true      
          restart: unless-stopped
 
+#clients
+     cadvisor:
+         hostname: $hostname
+         build: cadvisor
+#         ports:
+# no need to expose public port
+#             - "8880:8080"
+
+           #INFLUXB: 13.210.153.32
+#         network_mode: host
+#         container_name: telegraf
+         volumes:
+             - /:/rootfs:ro
+             - /var/run:/var/run:rw
+             - /var/lib/docker/:/var/lib/docker:ro
+             - /sys:/sys:ro
+         extra_hosts:
+             - "influxdb:52.64.148.2"
+         command:
+#             - add-host="influxdb:52.64.148.2"
+             -storage_driver="influxdb"
+             -storage_driver_db="cadvisor"
+             -storage_driver_host="influxdb:8086"
+         restart: unless-stopped
