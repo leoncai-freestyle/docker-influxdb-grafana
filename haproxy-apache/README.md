@@ -1,6 +1,7 @@
-#run docker-compose on web server
-#check haproxy?stat url is working or not
+# run docker-compose on web server
+## check haproxy?stat url is working or not
 curl http://52.64.148.2:8181/haproxy?stats
+
 #modify inputs in telegraf
  [[inputs.haproxy]]
     servers = ["http://52.64.148.2:8181/haproxy?stats"]
